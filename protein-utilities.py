@@ -7,6 +7,9 @@ import scipy
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
 
 
 def do_PCA(filename, filetype="csv", dim = 2):
@@ -58,10 +61,45 @@ def do_KMeans(df, clusters = 3):
     
     df['subtype'] = y_kmeans
 
-    plt.scatter(df[:, 0], df[:, 1], c=df['subtype'], s=50, cmap='viridis')
+    plt.scatter(df.iloc[:, 0], df.iloc[:, 1], c=df['subtype'], s=50, cmap='viridis')
 
     centers = kmeans.cluster_centers_
     plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
+
+    plt.savefig("clusters.png")
+
+
+def train_classifier(data, filetype = "csv"):
+    '''
+    Helper function to train a classifier
+
+    Inputs:
+    data: data to classify
+    filetype: type of data
+
+    Outputs:
+    Type of class
+    '''
+    if filetype == "csv":
+        simul = pd.read_csv(data)
+    elif filetype == "table":
+        simul = pd.read_table(data)
+    else:
+        simul = pd.read_excel(data)
+
+    
+    knn = KNeighborsClassifier()
+    X_train, X_test, y_train, y_test = train_test_split(data.drop("subtype", axis=1), data['subtype'], random_state=42)
+    knn.fit(X_train, y_train)
+    return knn, X_test, y_test
+
+def validate_classifier(classifier, X_test, y_test):
+
+    y_pred = classifier.predict(X_test)
+    cm = confusion_matrix(y_pred, y_test)
+    print(cm)
+
+#def classify_new_obs(fitted_classifier, )
 
 
 test_df = do_PCA("Desktop/granumhealth_mvp/cases_simul.csv")
