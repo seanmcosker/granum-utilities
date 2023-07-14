@@ -99,7 +99,18 @@ def validate_classifier(classifier, X_test, y_test):
     cm = confusion_matrix(y_pred, y_test)
     print(cm)
 
-#def classify_new_obs(fitted_classifier, )
+def classify_new_obs(fitted_classifier, new_data):
+    '''
+    Returns a prediction based on an amount of new data
+
+    Inputs:
+    fitted_classifier: fitted classification object
+    new_data: new data of same type as previously trained data missing class
+
+    '''
+    return fitted_classifier.predict(new_data)
+
+
 
 
 test_df = do_PCA("Desktop/granumhealth_mvp/cases_simul.csv")
