@@ -108,13 +108,15 @@ def classify_new_obs(fitted_classifier, new_data):
     new_data: new data of same type as previously trained data missing class
 
     '''
+    new_data = pd.read_excel(new_data)
     return fitted_classifier.predict(new_data)
 
 
 
 
-test_df = do_PCA("Desktop/granumhealth_mvp/cases_simul.csv")
-do_KMeans(test_df)
+#test_df = do_PCA("Desktop/granumhealth_mvp/cases_simul.csv")
+knn, x_test, y_test = train_classifier("Desktop/granumhealth_mvp/cases_simul.csv")
+classify_new_obs(knn, "Desktop/granumhealth_mvp/protest.csv")
 
 
     
